@@ -16,4 +16,5 @@ public class ChatMessage {
     String sender;
     String content;
     MessageType type;
+    String image;
 }

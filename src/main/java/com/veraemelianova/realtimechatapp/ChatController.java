@@ -14,7 +14,11 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        log.info("Message sent: {}", chatMessage.getSender()+": "+chatMessage.getContent() + " " + chatMessage.getType());
+        if (chatMessage.getType() == MessageType.IMAGE) {
+            log.info("Image message from {}: [IMAGE_DATA]", chatMessage.getSender());
+        } else {
+            log.info("Text message from {}: {}", chatMessage.getSender(), chatMessage.getContent());
+        }
         return chatMessage;
     }
 
