@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import java.util.Date;
+
 @Controller
 @Slf4j
 public class ChatController {
@@ -14,10 +16,11 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+        chatMessage.generateTimeStamp();
         if (chatMessage.getType() == MessageType.IMAGE) {
-            log.info("Image message from {}: [IMAGE_DATA]", chatMessage.getSender());
+            log.info("Image message from {} at {}: [IMAGE_DATA]", chatMessage.getSender(), chatMessage.getTimeStamp());
         } else {
-            log.info("Text message from {}: {}", chatMessage.getSender(), chatMessage.getContent());
+            log.info("Text message from {} at {}: {}", chatMessage.getSender(), chatMessage.getTimeStamp(), chatMessage.getContent());
         }
         return chatMessage;
     }

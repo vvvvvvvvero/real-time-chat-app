@@ -5,6 +5,7 @@ interface ChatMessageProps {
         sender: string;
         content: string;
         type: string;
+        timeStamp: string;
         image?: string;
     };
     username: string;
@@ -15,6 +16,9 @@ function ChatMessage({message, username}: ChatMessageProps) {
     const isJoin = message.type === 'JOIN';
     const isLeave = message.type === 'LEAVE';
     const isImage = message.type === 'IMAGE';
+
+    console.log(message.timeStamp, message.image);
+
 
     if (isJoin || isLeave) {
         return (
@@ -37,23 +41,25 @@ function ChatMessage({message, username}: ChatMessageProps) {
                         text={isCurrentUser ? 'white' : 'dark'}
                         className="flex-grow-0"
                     >
-                        <Card.Img src={message.image} alt="Image" />
+                        <Card.Img src={message.image} alt="Image"/>
                         <Card.Body className="p-2">
                             <Card.Text className="mb-1">
                                 {message.content}
                             </Card.Text>
                         </Card.Body>
                     </Card>
+                    <div className={`p-1 text-secondary`}>
+                        {message.timeStamp}
+                    </div>
                 </div>
             </Col>
         );
     }
 
 
-
     return (
         <Col className={`d-flex ${isCurrentUser ? 'justify-content-end' : 'justify-content-start'}`}>
-            <div className={`mb-2 mt-5 ${isCurrentUser ? 'text-end' : ''}`} style={{ maxWidth: '80%' }}>
+            <div className={`mb-2 mt-5 ${isCurrentUser ? 'text-end' : ''}`} style={{maxWidth: '80%'}}>
                 <div className={`p-1 text-${isCurrentUser ? 'dark' : 'secondary'}`}>
                     {message.sender}
                 </div>
@@ -68,6 +74,9 @@ function ChatMessage({message, username}: ChatMessageProps) {
                         </Card.Text>
                     </Card.Body>
                 </Card>
+                <div className={`p-1 text-secondary`}>
+                    {message.timeStamp}
+                </div>
             </div>
         </Col>
     );

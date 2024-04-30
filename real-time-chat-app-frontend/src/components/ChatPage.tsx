@@ -12,6 +12,7 @@ interface Message {
     sender: string;
     content: string;
     type: string;
+    timeStamp: string;
     image?: string;
 }
 function ChatPage({ username }: ChatPageProps) {
@@ -20,6 +21,7 @@ function ChatPage({ username }: ChatPageProps) {
     const messageInputRef = useRef<HTMLInputElement>(null);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
 
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,17 @@ function ChatPage({ username }: ChatPageProps) {
         setSelectedImage(file);
         console.log(file ? "Selected file " + file.name : "No file selected");
     }
+
+    const scrollToBottom = () => {
+        const {current } = chatContainerRef;
+        if (current) {
+            current.scrollTop = current.scrollHeight
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
 
     useEffect(() => {
@@ -59,8 +72,9 @@ function ChatPage({ username }: ChatPageProps) {
         if (!client || !content) return;
         const chatMessage = {
             sender: username,
-            content: content,
-            type: 'CHAT'
+            type: 'CHAT',
+            content: content
+
         };
         client.publish({ destination: '/app/chat.sendMessage', body: JSON.stringify(chatMessage) });
     };
@@ -81,24 +95,6 @@ function ChatPage({ username }: ChatPageProps) {
         reader.readAsDataURL(imageFile);
     };
 
-    /*const handleSendTextMessage = (event:  React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        const content = messageInputRef.current?.value || '';
-        sendTextMessage(content);
-        if (messageInputRef.current) {
-            messageInputRef.current.value = '';
-        }
-    };
-    const handleSendImageMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        if (selectedImage) {
-            sendImageMessage(selectedImage);
-            if (imageInputRef.current) {
-                imageInputRef.current.value = '';
-            }
-        }
-    };*/
-
     const handleSendMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
             event.preventDefault();
             if (selectedImage) {
@@ -118,7 +114,7 @@ function ChatPage({ username }: ChatPageProps) {
 
     return (
         <Container fluid="md" className="d-flex flex-column vh-100">
-            <div className="flex-grow-1 overflow-auto">
+            <div className="flex-grow-1 overflow-auto"  ref={chatContainerRef} style={{overflowY: 'auto' }}>
                 {messages.map((message, index) => (
                     <ChatMessage key={index} message={message} username={username}/>
                 ))}

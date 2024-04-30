@@ -28,8 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     /*@Bean
     public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
         ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-        container.setMaxTextMessageBufferSize(99999999);
-        container.setMaxBinaryMessageBufferSize(99999999);
+        container.setMaxTextMessageBufferSize(Integer.MAX_VALUE);
+        container.setMaxBinaryMessageBufferSize(Integer.MAX_VALUE);
         log.info("Websocket factory returned");
         return container;
     }*/
