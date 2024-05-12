@@ -25,14 +25,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/topic");
     }
 
-    /*@Bean
-    public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        registry.setMessageSizeLimit(1024 * 1024); // 1 MB
+        registry.setSendBufferSizeLimit(1024 * 1024); // 1 MB
+        registry.setSendTimeLimit(20000); // 20 seconds
+    }
+
+    @Bean
+    public ServletServerContainerFactoryBean createWebSocketContainer() {
         ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-        container.setMaxTextMessageBufferSize(Integer.MAX_VALUE);
-        container.setMaxBinaryMessageBufferSize(Integer.MAX_VALUE);
-        log.info("Websocket factory returned");
+        // Example: Set the buffer size to 512KB
+        container.setMaxTextMessageBufferSize(512 * 1024); // 512 KB
+        container.setMaxBinaryMessageBufferSize(512 * 1024); // 512 KB
         return container;
-    }*/
+    }
 
 
 }
